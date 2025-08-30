@@ -1,4 +1,4 @@
-# Ello
+# Ello – Voice-First Productivity Assistant 🎙️
 
 A new Flutter project.
 
