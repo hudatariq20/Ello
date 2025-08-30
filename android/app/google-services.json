@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225653456663",
+    "project_id": "elloai",
+    "storage_bucket": "elloai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225653456663:android:f919c2e6b38365c326c152",
+        "android_client_info": {
+          "package_name": "com.example.voice_input"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClKqxsizU7K1RwpJa26hSfuz9cVLjIr5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
