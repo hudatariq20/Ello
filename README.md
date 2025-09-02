@@ -1,4 +1,4 @@
-# Ello – Voice-First Productivity Assistant 🎙️
+# Ello – Voice-First Productivity Assistant for Parents and Care-givers.🎙️
 
 A new Flutter project.
 
