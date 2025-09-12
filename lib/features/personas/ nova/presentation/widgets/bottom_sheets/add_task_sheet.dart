@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../screens/nova_date_sheet.dart';
 import '../nova_widgets.dart';
 
 class AddTaskSheet extends StatefulWidget {
@@ -73,13 +74,18 @@ class _AddTaskSheetState extends State<AddTaskSheet> {
                 NovaActionChip(
                     icon: Icons.today,
                     label: 'Today',
-                    onPressed: () {},
+                    onPressed: () async{
+                      await showNovaDateSheet(context, kind: DateSheetKind.date, initialDate: DateTime.now(),);
+                    },
                     color: Colors.green[800]),
                 const SizedBox(width: 4),
+
                 NovaActionChip(
                     icon: Icons.track_changes,
                     label: 'Deadline',
-                    onPressed: () {}),
+                    onPressed: () async{
+                      await showNovaDateSheet(context, kind: DateSheetKind.deadline, initialDate: DateTime.now(),);
+                    }),
                 const SizedBox(width: 4),
                 NovaActionChip(
                     icon: Icons.flag_outlined,

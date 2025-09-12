@@ -8,3 +8,4 @@ export 'nova_todo_navbar.dart';
 export 'nova_tasktodo_card.dart';
 export 'bottom_sheets/bottom_sheet.dart';
 export 'nova_action_chip.dart';
+export 'quick_option.dart';
