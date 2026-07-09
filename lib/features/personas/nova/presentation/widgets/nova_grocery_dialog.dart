@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:voice_input/features/personas/%20nova/presentation/widgets/nova_widgets.dart';
+import 'package:voice_input/features/personas/nova/presentation/widgets/nova_widgets.dart';
 
 class NovaGroceryDialog extends StatefulWidget {
   const NovaGroceryDialog({super.key});

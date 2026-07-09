@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voice_input/features/personas/ nova/data/datasources/nova_datasources.dart';
-import 'package:voice_input/features/personas/%20nova/presentation/providers/nova_task_controller.dart';
+import 'package:voice_input/features/personas/nova/data/datasources/nova_datasources.dart';
+import 'package:voice_input/features/personas/nova/presentation/providers/nova_task_controller.dart';
 import 'package:voice_input/shared/models/task_item.dart';
 
 //Providers

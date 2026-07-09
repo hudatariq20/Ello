@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import 'package:voice_input/features/personas/%20nova/domain/entities/todo.dart';
-import 'package:voice_input/features/personas/%20nova/domain/repositories/base_todo_repository.dart';
+import 'package:voice_input/features/personas/nova/domain/entities/todo.dart';
+import 'package:voice_input/features/personas/nova/domain/repositories/base_todo_repository.dart';
 
 import '../models/todo_dto.dart';
 

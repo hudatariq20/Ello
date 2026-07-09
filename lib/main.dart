@@ -5,7 +5,10 @@ import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'features/personas/ nova/presentation/screens/nova_screen.dart';
+import 'features/auth/presentation/auth_provider/auth_providers.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
+import 'features/onboarding/onboarding_flow.dart';
+import 'features/personas/nova/presentation/screens/nova_todo_addTaskToday.dart';
 import 'firebase_options.dart';
 
 bool _isEnvLoaded = false;
@@ -92,13 +95,29 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
         ),
 
-        //home:  PersonaPresets(initialText: ""),
-        // home: const ElloHomeScreen(),
-        home: const NovaTodoAddTaskToday(),
-        //home: const NovaHubScreen(),
-        // home: const OnboardingFlow(),
-        //home: const Scaffold(body: ZenJournalScreen()),
+        home: const AppRouter(),
       ),
+    );
+  }
+}
+
+class AppRouter extends ConsumerWidget {
+  const AppRouter({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authUserAsync = ref.watch(AuthUserProvider);
+
+    return authUserAsync.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, __) => const LoginScreen(),
+      data: (user) {
+        if (user == null) return const LoginScreen();
+        if (!user.onboardingCompleted) return const OnboardingFlow();
+        return const NovaTodoAddTaskToday();
+      },
     );
   }
 }

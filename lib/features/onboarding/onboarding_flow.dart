@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voice_input/features/ello/screens/ello_home.dart';
 import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/providers.dart';
-import 'package:voice_input/shared/screens/ello_screen.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
 
 class OnboardingFlow extends ConsumerStatefulWidget {

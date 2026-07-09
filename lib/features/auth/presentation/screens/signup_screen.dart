@@ -93,9 +93,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     await ref
         .read(authControllerProvider.notifier)
         .signUp(user: newUser, password: password);
-    //MOVE THE SIGN UP SCREEN LOGIC TO THE BUILD MEHTOD SINCE IT IS NOT WORKING
-    // Move navigation + SnackBar into ref.listen() inside build()
-    //ref.listen is only triggered when the state changes and the widget doeesn't rebuild.
   }
 
   @override

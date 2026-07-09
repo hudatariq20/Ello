@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:voice_input/features/personas/%20nova/domain/entities/nova_entities.dart';
+import 'package:voice_input/features/personas/nova/domain/entities/nova_entities.dart';
 
 class VoiceReminderDto extends Equatable {
   final String? id;

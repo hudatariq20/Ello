@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:voice_input/features/personas/%20nova/data/repositories/grocery_repository.dart';
-import 'package:voice_input/features/personas/%20nova/domain/entities/grocery.dart';
+import 'package:voice_input/features/personas/nova/data/repositories/grocery_repository.dart';
+import 'package:voice_input/features/personas/nova/domain/entities/grocery.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
