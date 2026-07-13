@@ -10,14 +10,12 @@ class UserDto extends Equatable {
   final String name;
   final String email;
   final String selectedPersona;
-  final bool onboardingCompleted;
 //constructor
   const UserDto({
     this.id,
     this.name = '',
     this.email = '',
     this.selectedPersona = '',
-    this.onboardingCompleted = false,
   });
 
 //read objects from cloud firestore
@@ -28,7 +26,6 @@ class UserDto extends Equatable {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       selectedPersona: data['selectedPersona'] ?? '',
-      onboardingCompleted: data['onboardingCompleted'] ?? false,
     );
   }
 
@@ -38,7 +35,6 @@ class UserDto extends Equatable {
       'name': name,
       'email': email,
       'selectedPersona': selectedPersona,
-      'onboardingCompleted': onboardingCompleted,
     };
   }
 
@@ -49,7 +45,6 @@ class UserDto extends Equatable {
       name: name,
       email: email,
       selectedPersona: selectedPersona,
-      onboardingCompleted: onboardingCompleted,
     );
   }
 
@@ -60,12 +55,10 @@ class UserDto extends Equatable {
       name: user.name,
       email: user.email,
       selectedPersona: user.selectedPersona,
-      onboardingCompleted: user.onboardingCompleted,
     );
   }
 
 //equatable
   @override
-  List<Object?> get props =>
-      [id, name, email, selectedPersona, onboardingCompleted];
+  List<Object?> get props => [id, name, email, selectedPersona];
 }

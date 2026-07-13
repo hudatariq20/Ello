@@ -19,41 +19,6 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
       PageController(); //For maintaining the page controller for the onboarding cards
   int _currentPage = 0;
 
-  // void _gotoNextPage() async {
-  //   //final totalPages = 4;
-  //   final currentIndex = _pageController.page?.round() ?? 0;
-  //   if (currentIndex < 3) {
-  //     _pageController.nextPage(
-  //       duration: const Duration(milliseconds: 400),
-  //       curve: Curves.easeInOut,
-  //     );
-  //   } else {
-  //     //Mark onboarding complete in firebase
-  //     final user = FirebaseAuth.instance.currentUser;
-  //     if (user != null) {
-  //       await FirebaseFirestore.instance
-  //           .collection('users')
-  //           .doc(user.uid)
-  //           .update({
-  //         'onboardingCompleted': true,
-  //       });
-  //     }
-  //     //navigate to Ello screen
-  //     //LOGIC NEEDS TO BE IF ONBOARDING IS FALSE, GO TO ONBOARDING SCREEN ELSE GO TO ELLO SCREEN
-  //     if (mounted) {
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => const ElloHomeScreen()),
-  //       );
-  //     }
-
-  //     // Reset theme after navigation to avoid frame rebuild lag
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       ref.read(personaThemeProvider.notifier).setPersona("Zen");
-  //     });
-  //   }
-  // }
-
   Future<void> _gotoNextPage() async {
   final currentIndex = _pageController.page?.round() ?? 0;
 
