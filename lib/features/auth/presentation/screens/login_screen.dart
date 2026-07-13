@@ -1,18 +1,12 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:voice_input/features/auth/core/utils/validation.dart';
 import 'package:voice_input/features/auth/core/utils/validator.dart';
-import 'package:voice_input/features/auth/domain/entities/app_user.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:voice_input/features/auth/presentation/auth_provider/auth_providers.dart';
 import 'package:voice_input/features/auth/presentation/screens/auth_screen.dart';
-import 'package:voice_input/features/auth/presentation/screens/signup_screen.dart';
-import 'package:voice_input/features/ello/screens/ello_home.dart';
-import 'package:voice_input/features/onboarding/onboarding_flow.dart';
 import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
 import '../../../../shared/providers/personaTheme_provider.dart';
@@ -62,7 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final password = _passwordController.text.trim();
     debugPrint('Email: $email, Password: $password');
 
-    // Here you can use the text values for signup logic
+    //Here you can use the text values for signup logic
     debugPrint('Email: $email');
     debugPrint('Password: $password');
 
@@ -76,77 +70,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final theme = ref.watch(personaThemeProvider);
     final authState = ref.watch(authControllerProvider);
 
-    // Listen to auth state changes for navigation
-    ref.listen<AsyncValue<void>>(authControllerProvider,
-        (previous, next) async {
-      if (next is AsyncData) {
-        // Login was successful - check current user
-        final currentUser = FirebaseAuth.instance.currentUser;
+    ref.listen<AsyncValue<void>>(
+  authControllerProvider,
+  (previous, next) {
+    if (previous is AsyncLoading && next is AsyncData) {
+      if (!mounted) return;
 
-        if (currentUser != null) {
-          debugPrint('👤 User logged in: ${currentUser.email}');
-          //if the user is not mounted or the modal route is not current, return
-          if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Login successful!'),
-              backgroundColor: Colors.green,
-              duration: Duration(milliseconds: 1500),
-            ),
-          );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
 
-          await Future.delayed(const Duration(milliseconds: 800));
+      // No Navigator call.
+      // AppRouter rebuilds automatically from LoginScreen to Home.
+    }
 
-          // Get user data to check onboarding status
-          final userProvider = ref.read(UserRepositoryProvider);
-          final appUser = await userProvider.getUser(currentUser.uid).first;
+    if (next is AsyncError) {
+      if (!mounted) return;
 
-          if (mounted) {
-            if (appUser.onboardingCompleted == true) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const ElloHomeScreen()),
-              );
-            } else {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const OnboardingFlow(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(0.0, 0.1),
-                          end: Offset.zero,
-                        ).animate(CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.easeOutCubic,
-                        )),
-                        child: child,
-                      ),
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 600),
-                ),
-              );
-            }
-          }
-        }
-      }
-
-      if (next is AsyncError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login failed: ${next.error.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login failed: ${next.error}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  },
+);
 
     _colorAnimation = ColorTween(
       begin: theme.buttonColors.first,

@@ -1,6 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +8,6 @@ import 'package:voice_input/features/auth/core/utils/validator.dart';
 import 'package:voice_input/features/auth/domain/entities/app_user.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:voice_input/features/auth/presentation/screens/login_screen.dart';
-import 'package:voice_input/features/onboarding/onboarding_flow.dart';
 import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
@@ -63,7 +60,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    final confirmPassword = _confirmPasswordController.text.trim();
+    //final confirmPassword = _confirmPasswordController.text.trim();
 
     // Basic validation
     // if (name.isEmpty ||
@@ -87,7 +84,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     debugPrint('Email: $email');
     debugPrint('Password: $password');
 
-    // TODO: Implement actual signup logic
     final newUser = new AppUser(name: name, email: email, selectedPersona: "");
 
     await ref
@@ -100,64 +96,39 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     final theme = ref.watch(personaThemeProvider);
     final authState = ref.watch(authControllerProvider);
 
-    // Listen to auth state changes for navigation
-    ref.listen<AsyncValue<void>>(authControllerProvider,
-        (previous, next) async {
-      if (next is AsyncData) {
-        final currentUser = FirebaseAuth.instance.currentUser;
-        debugPrint("currentUser: $currentUser");
-        //if the user is not mounted or the modal route is not current, return
-        if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
-        if (currentUser != null) {
-          // Show success message first
+    ref.listen<AsyncValue<void>>(
+      authControllerProvider,
+      (previous, next) async {
+        if (previous is AsyncLoading && next is AsyncData) {
+          if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Account created successfully!'),
               backgroundColor: Colors.green,
-              duration: Duration(milliseconds: 1500),
+              duration: Duration(milliseconds: 800),
             ),
           );
 
-          // Add a small delay before navigation for better UX
           await Future.delayed(const Duration(milliseconds: 800));
 
-          if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const OnboardingFlow(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0.0, 0.1),
-                        end: Offset.zero,
-                      ).animate(CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.easeOutCubic,
-                      )),
-                      child: child,
-                    ),
-                  );
-                },
-                transitionDuration: const Duration(milliseconds: 600),
-              ),
-            );
-          }
+          if (!mounted) return;
+
+          Navigator.of(context).pop();
         }
-      }
-      if (next is AsyncError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.error.toString()),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    });
+
+        if (next is AsyncError) {
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Signup failed: ${next.error}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
 
     _colorAnimation = ColorTween(
       begin: theme.buttonColors.first,
@@ -299,11 +270,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                 ),
                 GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginScreen()));
-                    },
+                       Navigator.of(context).pop();},                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => const LoginScreen()));
+                    // },
                     child: Text(
                       "login",
                       style: GoogleFonts.urbanist(

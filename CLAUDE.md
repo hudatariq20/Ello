@@ -24,12 +24,18 @@ Note: `test/widget_test.dart` is still the unmodified Flutter counter-app templa
 ## Architecture
 
 ### Bootstrap & routing
-`lib/main.dart` loads `.env`, initializes Firebase, then wraps everything in a Riverpod `ProviderScope`. `AppRouter` watches `AuthUserProvider` (a `StreamProvider<AppUser?>`) and picks the root screen: `LoginScreen` (signed out) → `OnboardingFlow` (signed in, `onboardingCompleted == false`) → `NovaTodoAddTaskToday` (the current app home). State management throughout the app is **Riverpod** (`Provider`, `StreamProvider`, `Notifier`, `AsyncNotifier`) — there is no other state layer.
+`lib/main.dart` loads `.env`, initializes Firebase, then wraps everything in a Riverpod `ProviderScope`. The `MaterialApp`'s `home` is `StartupGate` (`features/onboarding/presentation/startup_gate.dart`), which is the real entry gate:
+1. Watches `hasSeenOnboardingProvider` (a `FutureProvider<bool>` backed by the on-device Hive flag, `features/onboarding/data/onboarding_local_service.dart` / `OnboardingLocalService`). If onboarding hasn't been seen on this device, shows `OnboardingFlow` — before any auth check.
+2. Once the device-level flag is true, hands off to `AppRouter` (`features/auth/presentation/app_router.dart`), which watches `AuthUserProvider` (a `StreamProvider<AppUser?>`) and picks: `LoginScreen` (signed out) → `OnboardingFlow` again (signed in, but the *account's* `AppUser.onboardingCompleted == false`) → `NovaTodoAddTaskToday` (current app home).
+
+Note the two onboarding flags serve different purposes and neither is wired to fully replace the other yet: the Hive flag is per-device and checked pre-auth; `AppUser.onboardingCompleted` is per-account (Firestore) and checked post-auth. `OnboardingFlow`'s completion handler only updates the Firestore flag and navigates directly to `ElloHomeScreen` — it does not yet call `OnboardingLocalService.setOnboardingSeen()`, so the Hive flag never flips from its default `false` in the current wiring.
+
+State management throughout the app is **Riverpod** (`Provider`, `StreamProvider`, `FutureProvider`, `Notifier`, `AsyncNotifier`) — there is no other state layer.
 
 ### Feature structure (`lib/features/`)
 Each feature loosely follows domain/data/presentation layering:
 - **auth/** — `domain/entities/app_user.dart` (`AppUser`), `domain/respository/{auth,user}/base_*_repository.dart` abstract contracts, `data/repositories/*` Firebase-backed implementations, `presentation/auth_provider/*` wires repositories into Riverpod providers, `presentation/controllers/auth_controller.dart` is an `AsyncNotifier` used by the screens for sign up/log in/reset password.
-- **onboarding/** — first-run flow shown when `AppUser.onboardingCompleted` is false. `data/onboarding_local_service.dart` (`OnboardingLocalService`, exposed via `onboardingLocalServiceProvider`) is a device-local Hive flag for "has this device seen onboarding", separate from the Firestore-backed `AppUser.onboardingCompleted`; call `init()` once before use.
+- **onboarding/** — see "Bootstrap & routing" above for how `StartupGate` (device-local Hive flag) and `AppRouter` (`AppUser.onboardingCompleted`, Firestore) both gate `OnboardingFlow`.
 - **personas/** — the app's assistants. Each persona has its own domain/data/presentation split and a Firestore-backed repository:
   - **Nova** — task/productivity persona (todos, groceries, reminders, appointments, voice memos). Firestore path: `users/{userId}/personas/{personaId}/{todos|groceries|reminders|appointments}`.
   - **Zen** — journaling/mood persona (`data/models/journal_entry.dart`, `mood_model.dart`).

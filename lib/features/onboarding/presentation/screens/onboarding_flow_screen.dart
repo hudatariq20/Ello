@@ -1,14 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voice_input/features/ello/screens/ello_home.dart';
 import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/providers.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
 
 class OnboardingFlow extends ConsumerStatefulWidget {
-  const OnboardingFlow({super.key});
+  const OnboardingFlow({super.key, required this.onFinished});
+
+  final Future<void> Function() onFinished;
 
   @override
   ConsumerState<OnboardingFlow> createState() => _OnboardingFlowState();
@@ -19,40 +19,56 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
       PageController(); //For maintaining the page controller for the onboarding cards
   int _currentPage = 0;
 
-  void _gotoNextPage() async {
-    final totalPages = 4;
-    final currentIndex = _pageController.page?.round() ?? 0;
-    if (currentIndex < 3) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      //Mark onboarding complete in firebase
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({
-          'onboardingCompleted': true,
-        });
-      }
-      //navigate to Ello screen
-      //LOGIC NEEDS TO BE IF ONBOARDING IS FALSE, GO TO ONBOARDING SCREEN ELSE GO TO ELLO SCREEN
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ElloHomeScreen()),
-        );
-      }
+  // void _gotoNextPage() async {
+  //   //final totalPages = 4;
+  //   final currentIndex = _pageController.page?.round() ?? 0;
+  //   if (currentIndex < 3) {
+  //     _pageController.nextPage(
+  //       duration: const Duration(milliseconds: 400),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   } else {
+  //     //Mark onboarding complete in firebase
+  //     final user = FirebaseAuth.instance.currentUser;
+  //     if (user != null) {
+  //       await FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(user.uid)
+  //           .update({
+  //         'onboardingCompleted': true,
+  //       });
+  //     }
+  //     //navigate to Ello screen
+  //     //LOGIC NEEDS TO BE IF ONBOARDING IS FALSE, GO TO ONBOARDING SCREEN ELSE GO TO ELLO SCREEN
+  //     if (mounted) {
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const ElloHomeScreen()),
+  //       );
+  //     }
 
-      // Reset theme after navigation to avoid frame rebuild lag
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(personaThemeProvider.notifier).setPersona("Zen");
-      });
-    }
+  //     // Reset theme after navigation to avoid frame rebuild lag
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       ref.read(personaThemeProvider.notifier).setPersona("Zen");
+  //     });
+  //   }
+  // }
+
+  Future<void> _gotoNextPage() async {
+  final currentIndex = _pageController.page?.round() ?? 0;
+
+  if (currentIndex < 3) {
+    await _pageController.nextPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    return;
   }
+
+  await widget.onFinished();
+
+  ref.read(personaThemeProvider.notifier).setPersona("Zen");
+}
 
   List<Widget> _buildOnboardingScreens(PersonaTheme personaTheme) {
     return [
