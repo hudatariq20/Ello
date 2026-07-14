@@ -32,6 +32,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
       TextEditingController();
   final GlobalKey<FormState> _signupFormKey = GlobalKey<FormState>();
   bool _signupSubmitted = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void initState() {
@@ -215,11 +217,22 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
             //const SizedBox(height: 20),
             _NameInputField(controller: _nameController),
             _EmailInputField(controller: _emailController),
-            _PasswordInputField(controller: _passwordController),
+            _PasswordInputField(
+              controller: _passwordController,
+              obscureText: _obscurePassword,
+              onToggleObscureText: () {
+                setState(() => _obscurePassword = !_obscurePassword);
+              },
+            ),
 
             _ConfirmPasswordInputField(
               controller: _confirmPasswordController,
               passwordController: _passwordController,
+              obscureText: _obscureConfirmPassword,
+              onToggleObscureText: () {
+                setState(
+                    () => _obscureConfirmPassword = !_obscureConfirmPassword);
+              },
             ),
 
             //Create Account Button
@@ -390,7 +403,14 @@ class _EmailInputField extends StatelessWidget {
 
 class _PasswordInputField extends StatelessWidget {
   final TextEditingController controller;
-  const _PasswordInputField({super.key, required this.controller});
+  final bool obscureText;
+  final VoidCallback onToggleObscureText;
+  const _PasswordInputField({
+    super.key,
+    required this.controller,
+    required this.obscureText,
+    required this.onToggleObscureText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -406,13 +426,20 @@ class _PasswordInputField extends StatelessWidget {
           const PasswordValidation(),
         ]),
         controller: controller,
-        obscureText: true,
+        obscureText: obscureText,
         decoration: InputDecoration(
           hintText: 'Password',
           hintStyle: GoogleFonts.urbanist(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Theme.of(context).colorScheme.primary,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: onToggleObscureText,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
@@ -440,10 +467,14 @@ class _PasswordInputField extends StatelessWidget {
 class _ConfirmPasswordInputField extends StatelessWidget {
   final TextEditingController controller;
   final TextEditingController passwordController;
+  final bool obscureText;
+  final VoidCallback onToggleObscureText;
   const _ConfirmPasswordInputField({
     super.key,
     required this.controller,
     required this.passwordController,
+    required this.obscureText,
+    required this.onToggleObscureText,
   });
   @override
   Widget build(BuildContext context) {
@@ -477,13 +508,20 @@ class _ConfirmPasswordInputField extends StatelessWidget {
           return null;
         },
         controller: controller,
-        obscureText: true,
+        obscureText: obscureText,
         decoration: InputDecoration(
           hintText: 'Confirm Password',
           hintStyle: GoogleFonts.urbanist(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Theme.of(context).colorScheme.primary,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: onToggleObscureText,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),

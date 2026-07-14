@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:voice_input/features/auth/core/utils/auth_error_mapper.dart';
 import 'package:voice_input/features/auth/core/utils/validation.dart';
 import 'package:voice_input/features/auth/core/utils/validator.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
@@ -26,7 +27,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+  final FocusNode _passwordFocusNode = FocusNode();
   bool _loginSubmitted = false;
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -43,6 +46,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     _controller.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -101,10 +105,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Login failed: ${next.error}'),
+              content: Text(getLoginErrorMessage(next.error)),
               backgroundColor: Colors.red,
             ),
           );
+
+          //Deferred to after this frame: requesting focus/selection here
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            _passwordFocusNode.requestFocus();
+            _passwordController.selection = TextSelection(
+              baseOffset: 0,
+              extentOffset: _passwordController.text.length,
+            );
+          });
         }
       },
     );
@@ -121,18 +135,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             child: ZoomIn(
               duration:
                   const Duration(seconds: 2), // Adjust duration to slow down
-              child: authState.when(
-                data: (_) => _buildloginFormUI(context, theme),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Login failed: $error"),
-                    const SizedBox(height: 16),
-                    // _buildFormUI(theme), // Allow retry
-                  ],
-                ),
-              ),
+              child: _buildloginFormUI(context, theme,
+                  isLoading: authState.isLoading),
             ),
           ),
         ),
@@ -140,7 +144,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
-  Form _buildloginFormUI(BuildContext context, PersonaTheme theme) {
+  Form _buildloginFormUI(BuildContext context, PersonaTheme theme,
+      {required bool isLoading}) {
     return Form(
       key: _loginFormKey,
       child: Column(
@@ -181,7 +186,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           ),
           const SizedBox(height: 20),
           _EmailInputField(controller: _emailController),
-          _PasswordInputField(controller: _passwordController),
+          _PasswordInputField(
+            controller: _passwordController,
+            focusNode: _passwordFocusNode,
+            obscureText: _obscurePassword,
+            onToggleObscureText: () {
+              setState(() => _obscurePassword = !_obscurePassword);
+            },
+          ),
           //Forgot Password Button
           Align(
             alignment: Alignment.centerRight,
@@ -215,7 +227,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               animation: _colorAnimation,
               builder: (context, child) {
                 return GestureDetector(
-                  onTap: _handleLogin,
+                  onTap: isLoading ? null : _handleLogin,
                   child: Container(
                     width: double.infinity,
                     height: 48,
@@ -233,7 +245,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Center(
-                      child: Text(
+                      child: isLoading
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Text(
                         'Login',
                         style: GoogleFonts.urbanist(
                           fontSize: 20,
@@ -333,8 +355,17 @@ class _EmailInputField extends StatelessWidget {
 }
 
 class _PasswordInputField extends StatelessWidget {
-  const _PasswordInputField({super.key, required this.controller});
+  const _PasswordInputField({
+    super.key,
+    required this.controller,
+    this.focusNode,
+    required this.obscureText,
+    required this.onToggleObscureText,
+  });
   final TextEditingController controller;
+  final FocusNode? focusNode;
+  final bool obscureText;
+  final VoidCallback onToggleObscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -342,17 +373,25 @@ class _PasswordInputField extends StatelessWidget {
       padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 16.0),
       child: TextFormField(
         controller: controller,
+        focusNode: focusNode,
         validator: Validator.apply(context, [
           RequiredValidation(),
           const PasswordValidation(),
         ]),
-        obscureText: true,
+        obscureText: obscureText,
         decoration: InputDecoration(
           hintText: 'Password',
           hintStyle: GoogleFonts.urbanist(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Theme.of(context).colorScheme.primary,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: onToggleObscureText,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
