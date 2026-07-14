@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:voice_input/app/startup_gate.dart';
+import 'package:voice_input/features/onboarding/data/onboarding_local_service.dart';
+import 'package:voice_input/features/onboarding/presentation/providers/onboarding_providers.dart';
 import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,13 +19,20 @@ Future<void> loadEnvOnce() async {
     debugPrint("✅ .env loaded");
   }
 }
-
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await loadEnvOnce();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const ProviderScope(child: MyApp()));
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  final onboardingService = OnboardingLocalService();
+  await onboardingService.init();
+
+  runApp(ProviderScope(
+    overrides: [
+      onboardingLocalServiceProvider.overrideWithValue(onboardingService),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 //CONVERT TO STATEFUL WIDGET

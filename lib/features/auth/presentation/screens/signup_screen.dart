@@ -31,6 +31,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _signupFormKey = GlobalKey<FormState>();
+  bool _signupSubmitted = false;
 
   @override
   void initState() {
@@ -86,6 +87,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
     final newUser = new AppUser(name: name, email: email, selectedPersona: "");
 
+    _signupSubmitted = true;
+
     await ref
         .read(authControllerProvider.notifier)
         .signUp(user: newUser, password: password);
@@ -99,7 +102,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     ref.listen<AsyncValue<void>>(
       authControllerProvider,
       (previous, next) async {
-        if (previous is AsyncLoading && next is AsyncData) {
+        if (!_signupSubmitted) return;
+
+        if (next is AsyncData<void>) {
+          _signupSubmitted = false;
+
           if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +124,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
           Navigator.of(context).pop();
         }
 
-        if (next is AsyncError) {
+        if (next is AsyncError<void>) {
+          _signupSubmitted = false;
+
           if (!mounted) return;
 
           ScaffoldMessenger.of(context).showSnackBar(

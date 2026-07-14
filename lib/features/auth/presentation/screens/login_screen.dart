@@ -26,6 +26,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+  bool _loginSubmitted = false;
 
   @override
   void initState() {
@@ -60,6 +61,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     debugPrint('Email: $email');
     debugPrint('Password: $password');
 
+    _loginSubmitted = true;
+
     await ref
         .read(authControllerProvider.notifier)
         .logIn(email: email, password: password);
@@ -71,34 +74,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     final authState = ref.watch(authControllerProvider);
 
     ref.listen<AsyncValue<void>>(
-  authControllerProvider,
-  (previous, next) {
-    if (previous is AsyncLoading && next is AsyncData) {
-      if (!mounted) return;
+      authControllerProvider,
+      (previous, next) {
+        if (!_loginSubmitted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login successful!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+        if (next is AsyncData<void>) {
+          _loginSubmitted = false;
 
-      // No Navigator call.
-      // AppRouter rebuilds automatically from LoginScreen to Home.
-    }
+          if (!mounted) return;
 
-    if (next is AsyncError) {
-      if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login successful!'),
+              backgroundColor: Colors.green,
+            ),
+          );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Login failed: ${next.error}'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  },
-);
+          // No Navigator call.
+          // AppRouter rebuilds automatically from LoginScreen to Home.
+        }
+
+        if (next is AsyncError<void>) {
+          _loginSubmitted = false;
+
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login failed: ${next.error}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
 
     _colorAnimation = ColorTween(
       begin: theme.buttonColors.first,

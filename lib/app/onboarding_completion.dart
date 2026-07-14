@@ -13,7 +13,7 @@ Future<void> finishOnboarding(
 ) async {
   final service = ref.read(onboardingLocalServiceProvider);
 
-  await service.init();
+  //await service.init();
   await service.setOnboardingSeen();
 
   ref.invalidate(hasSeenOnboardingProvider);

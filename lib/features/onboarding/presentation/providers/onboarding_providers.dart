@@ -8,8 +8,7 @@ final onboardingLocalServiceProvider = Provider<OnboardingLocalService>((ref) {
 });
 
 ///Whether this device has already seen onboarding, per the local Hive flag.
-final hasSeenOnboardingProvider = FutureProvider<bool>((ref) async {
+final hasSeenOnboardingProvider = Provider<bool>((ref) {
   final service = ref.watch(onboardingLocalServiceProvider);
-  await service.init();
   return service.hasSeenOnboarding();
-});//Initialize the local service, read Hive, and return whether onboarding was already seen.
+});
