@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:voice_input/features/auth/core/utils/auth_error_mapper.dart';
 import 'package:voice_input/features/auth/core/utils/validation.dart';
 import 'package:voice_input/features/auth/core/utils/validator.dart';
 import 'package:voice_input/features/auth/domain/entities/app_user.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:voice_input/features/auth/presentation/screens/login_screen.dart';
 import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
@@ -133,7 +133,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Signup failed: ${next.error}'),
+              content: Text(getSignupErrorMessage(next.error)),
               backgroundColor: Colors.red,
             ),
           );
@@ -153,17 +153,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
             child: ZoomIn(
               duration:
                   const Duration(seconds: 2), // Adjust duration to slow down
-              child: authState.when(
-                data: (_) => _buildUIForm(context, theme),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Signup failed: $error"),
-                    const SizedBox(height: 16),
-                    // _buildFormUI(theme), // Allow retry
-                  ],
-                ),
+              child: _buildUIForm(
+                context,
+                theme,
+                isLoading: authState.isLoading,
               ),
             ),
           ),
@@ -173,7 +166,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     /////
   }
 
-  Form _buildUIForm(BuildContext context, PersonaTheme theme) {
+  Form _buildUIForm(
+    BuildContext context,
+    PersonaTheme theme, {
+    required bool isLoading,
+  }) {
     return Form(
       key: _signupFormKey,
       child: SingleChildScrollView(
@@ -242,7 +239,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                 animation: _colorAnimation,
                 builder: (context, child) {
                   return GestureDetector(
-                    onTap: _handleSignup,
+                    onTap: isLoading ? null : _handleSignup,
                     child: Container(
                       width: double.infinity,
                       height: 48,
@@ -260,14 +257,25 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Center(
-                        child: Text(
-                          'Create Account',
-                          style: GoogleFonts.urbanist(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        ),
+                        child: isLoading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              )
+                            : Text(
+                                'Create Account',
+                                style: GoogleFonts.urbanist(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
                       ),
                     ),
                   );
@@ -292,11 +300,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                 ),
                 GestureDetector(
                     onTap: () {
-                       Navigator.of(context).pop();},                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => const LoginScreen()));
-                    // },
+                      Navigator.of(context).pop();
+                    },
                     child: Text(
                       "login",
                       style: GoogleFonts.urbanist(
