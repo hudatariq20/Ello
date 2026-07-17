@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voice_input/features/personas/zen/presentation/screens/zen_screens.dart';
+import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:voice_input/shared/screens/screens.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
@@ -17,6 +18,7 @@ class _PersonaPresetsState extends State<PersonaPresets> {
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
+      themeOverride: zenPersonaTheme,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,

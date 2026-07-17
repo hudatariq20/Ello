@@ -1,16 +1,24 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:voice_input/shared/models/personaTheme_model.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 
 class GradientBackground extends ConsumerWidget {
   final Widget child;
 
-  const GradientBackground({super.key, required this.child});
+  /// Optional explicit theme. When supplied, this is used instead of
+  /// watching [personaThemeProvider] — for screens (like the Ello shell)
+  /// whose background must stay fixed regardless of the globally selected
+  /// persona.
+  final PersonaTheme? themeOverride;
+
+  const GradientBackground({super.key, required this.child, this.themeOverride});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the selected persona's gradient colors
-    final personaTheme = ref.watch(personaThemeProvider);
+    final PersonaTheme theme =
+        themeOverride ?? ref.watch(personaThemeProvider);
 
     return Container(
       width: double.infinity,
@@ -20,8 +28,7 @@ class GradientBackground extends ConsumerWidget {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           stops: const [0.0, 0.8, 1.0],
-          colors: personaTheme
-              .gradientColors, // Use the gradient colors from PersonaTheme
+          colors: theme.gradientColors,
         ),
       ),
       child:

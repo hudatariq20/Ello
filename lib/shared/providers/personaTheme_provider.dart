@@ -10,48 +10,13 @@ class PersonaThemeNotifier extends Notifier<PersonaTheme> {
   @override
   PersonaTheme build() {
     // Default to Zen
-    return const PersonaTheme(
-      gradientColors: [
-        Color(0xFFE5CDFF),
-        Color(0xFFD0D9FF),
-        Color(0xFFB6E5FF),
-      ],
-      appBarColor: Color(0xFFE5CDFF),
-      appBarIconColor: Color(0xFF8F54FF),
-      seedColor: Color(0xFFE5CDFF),
-      buttonColors: [
-        Color(0xFFE858FF),
-        Color(0xFF8F54FF),
-        Color(0xFF4E9FFF),
-      ],
-      voiceId: 'TxGEqnHWrfWFTfGW9XjX', // Rachel - default voice
-      voiceStability: 0.15,
-      voiceSimilarity: 0.75,
-    );
+    return zenPersonaTheme;
   }
 
   void setPersona(String personaName) {
     switch (personaName) {
       case 'Zen':
-        state = const PersonaTheme(
-          gradientColors: [
-            Color(0xFFE5CDFF),
-            Color(0xFFD0D9FF),
-            Color(0xFFB6E5FF),
-          ],
-          appBarColor: Color(0xFFE5CDFF),
-          appBarIconColor: Color(0xFF8F54FF),
-          seedColor: Color(0xFFE5CDFF), // Zen
-          buttonColors: [
-            Color(0xFFE858FF),
-            Color(0xFF8F54FF),
-            Color(0xFF4E9FFF),
-          ],
-          voiceId:
-              'TxGEqnHWrfWFTfGW9XjX', // Josh , Calm soothing mindful voice.
-          voiceStability: 0.2,
-          voiceSimilarity: 0.8,
-        );
+        state = zenPersonaTheme;
         break;
       case 'Spark':
         state = const PersonaTheme(
