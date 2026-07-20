@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
@@ -29,7 +29,7 @@ class ElloHome extends ConsumerWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Continue where you left off',
+                  'Your Assistants',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -41,7 +41,7 @@ class ElloHome extends ConsumerWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 0.95,
+                  childAspectRatio: 1.2,
                   children: [
                     PersonaStatusCard(
                       persona: 'Nova',
@@ -89,7 +89,20 @@ class ElloHome extends ConsumerWidget {
             ),
           ),
         ),
-        bottomNavigationBar: const ElloBottomNavigation(),
+        bottomNavigationBar:  ElloBottomNavigation(
+          backgroundColor: zenPersonaTheme.appBarColor,
+          iconColor: zenPersonaTheme.appBarIconColor,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // speech logic later
+          },
+          shape: const CircleBorder(),
+          backgroundColor: zenPersonaTheme.appBarColor,
+          foregroundColor: Colors.white,
+          child: const Icon(Icons.mic),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -104,14 +117,20 @@ class ElloHome extends ConsumerWidget {
             children: [
               Text(
                 'Good morning, Huda',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: GoogleFonts.urbanist(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                        ),
               ),
               const SizedBox(height: 4),
               Text(
                 'Continue where you left off',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: GoogleFonts.urbanist(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
               ),
             ],
           ),
