@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voice_input/features/auth/presentation/auth_provider/auth_providers.dart';
 import 'package:voice_input/features/auth/presentation/screens/login_screen.dart';
+import 'package:voice_input/features/ello/screens/ello_home_screen.dart';
 import 'package:voice_input/features/personas/nova/presentation/screens/nova_hub.dart';
 
 import 'package:voice_input/features/personas/nova/presentation/screens/nova_todo_addTaskToday.dart';
@@ -29,7 +30,7 @@ class AppRouter extends ConsumerWidget {
       error: (_, __) => const LoginScreen(),
       data: (user) {
         if (user == null) return const LoginScreen();
-        return PersonaPresets(initialText: '');
+        return ElloHome();
       },
     );
   }
