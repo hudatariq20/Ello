@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:voice_input/shared/providers/personaTheme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
-import '../../../shared/models/shared_models.dart';
+import '../../../../shared/models/shared_models.dart';
 import '../widgets/ello_widgets.dart';
 
 class ElloHome extends ConsumerWidget {
