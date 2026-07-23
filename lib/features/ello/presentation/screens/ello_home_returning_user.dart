@@ -5,7 +5,6 @@ import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:voice_input/providers/assistant_provider.dart';
 import 'package:voice_input/shared/screens/temp_sign_out.dart';
-import 'package:voice_input/shared/widgets/assistant_wake_word.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
 
 class ElloHomeScreen extends ConsumerStatefulWidget {
