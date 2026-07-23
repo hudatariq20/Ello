@@ -5,7 +5,7 @@ import 'package:voice_input/features/auth/core/utils/validation.dart';
 import 'package:voice_input/features/auth/core/utils/validator.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:voice_input/features/auth/presentation/screens/verify_email_screen.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voice_input/features/personas/nova/presentation/providers/nova_tasks_provider.dart';
 import 'package:voice_input/shared/models/shared_models.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 import '../../data/datasources/nova_datasources.dart';
 import '../widgets/nova_widgets.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 
 class TaskTile extends ConsumerWidget {
   final IconData icon;

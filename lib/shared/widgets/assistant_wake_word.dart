@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:voice_input/features/personas/nova/presentation/screens/nova_hub.dart';
 import 'package:voice_input/shared/screens/screens.dart';
 import '../../providers/assistant_provider.dart';
 import 'package:voice_input/shared/services/services.dart';
@@ -100,7 +101,7 @@ class _AssistantWakeWordState extends ConsumerState<AssistantWakeWord>
             if (!mounted) return;
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               //builder: (context) => ChatScreen(initialText: result),
-              builder: (context) => PersonaPresets(initialText: result),
+              builder: (context) => NovaHubScreen(),
             ));
           });
         }

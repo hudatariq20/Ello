@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:voice_input/shared/models/personaTheme_model.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
 
 class NovaListButton extends StatelessWidget {
   final PersonaTheme theme;

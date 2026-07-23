@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voice_input/shared/models/personaTheme_model.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 
 class GradientBackground extends ConsumerWidget {
   final Widget child;

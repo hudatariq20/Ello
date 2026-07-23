@@ -1,46 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/features/ello/presentation/models/ello_intro_data.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
+import 'package:voice_input/shared/theme/persona_presets.dart';
+import 'package:voice_input/shared/theme/persona_type.dart';
+
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
-import '../../../../shared/models/shared_models.dart';
-import '../../data/ello_models.dart';
+
+
 import '../widgets/ello_widgets.dart';
 
 class ElloHomeScreenNewUser extends ConsumerWidget {
   const ElloHomeScreenNewUser({super.key});
 
-  static const _personas = <PersonaIntroData>[
-    PersonaIntroData(
-      name: 'Nova',
-      category: 'Tasks & Reminders',
-      actionLabel: 'Start with Nova',
-      icon: Icons.check_circle_outline,
-      accentColor: Color(0xFF42A5F5),
-    ),
-    PersonaIntroData(
-      name: 'Zen',
-      category: 'Journaling',
-      actionLabel: 'Start a journal',
-      icon: Icons.self_improvement,
-      accentColor: Color(0xFF8F54FF),
-    ),
-    PersonaIntroData(
-      name: 'Spark',
-      category: 'Planning',
-      actionLabel: 'Plan your week',
-      icon: Icons.flash_on,
-      accentColor: Color(0xFFFF8A65),
-    ),
-    PersonaIntroData(
-      name: 'Sage',
-      category: 'Learning',
-      actionLabel: 'Ask Sage anything',
-      icon: Icons.school_outlined,
-      accentColor: Color(0xFF8D6E63),
-    ),
-  ];
-
+static const _personas = <ElloIntroData>[
+  ElloIntroData(
+    type: PersonaType.nova,
+    name: 'Nova',
+    category: 'Tasks & Reminders',
+    actionLabel: 'Start with Nova',
+    icon: Icons.check_circle_outline,
+    accentColor: Color(0xFF42A5F5),
+  ),
+  ElloIntroData(
+    type: PersonaType.zen,
+    name: 'Zen',
+    category: 'Journaling',
+    actionLabel: 'Start a journal',
+    icon: Icons.self_improvement,
+    accentColor: Color(0xFF8F54FF),
+  ),
+  ElloIntroData(
+    type: PersonaType.spark,
+    name: 'Spark',
+    category: 'Planning',
+    actionLabel: 'Plan your week',
+    icon: Icons.flash_on,
+    accentColor: Color(0xFFFF8A65),
+  ),
+  ElloIntroData(
+    type: PersonaType.sage,
+    name: 'Sage',
+    category: 'Learning',
+    actionLabel: 'Ask Sage anything',
+    icon: Icons.school_outlined,
+    accentColor: Color(0xFF8D6E63),
+  ),
+];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GradientBackground(
@@ -101,13 +108,13 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final persona = _personas[index];
 
-                    return PersonaIntroCard(
+                    return ElloIntroCard(
                       data: persona,
                       onTap: () {
                         _openPersona(
                           context,
                           ref,
-                          persona.name,
+                          persona.type,
                         );
                       },
                     );
@@ -155,26 +162,29 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
     );
   }
 
-  void _openPersona(
-    BuildContext context,
-    WidgetRef ref,
-    String persona,
-  ) {
-    ref.read(personaThemeProvider.notifier).setPersona(persona);
+ void _openPersona(
+  BuildContext context,
+  WidgetRef ref,
+  PersonaType persona,
+) {
+  ref.read(personaThemeProvider.notifier).setPersona(persona);
 
-    switch (persona) {
-      case 'Nova':
-        // Navigate to Nova.
-        break;
-      case 'Zen':
-        // Navigate to Zen.
-        break;
-      case 'Spark':
-        // Navigate to Spark.
-        break;
-      case 'Sage':
-        // Navigate to Sage.
-        break;
-    }
+  switch (persona) {
+    case PersonaType.nova:
+      // Navigator.push(...NovaHubScreen());
+      break;
+
+    case PersonaType.zen:
+      // Navigator.push(...ZenHubScreen());
+      break;
+
+    case PersonaType.spark:
+      // Navigator.push(...SparkHubScreen());
+      break;
+
+    case PersonaType.sage:
+      // Navigator.push(...SageHubScreen());
+      break;
   }
+}
 }

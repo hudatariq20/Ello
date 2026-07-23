@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voice_input/shared/models/personaTheme_model.dart';
-import 'package:voice_input/shared/providers/providers.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
+import 'package:voice_input/shared/theme/persona_type.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
 
 class OnboardingFlow extends ConsumerStatefulWidget {
@@ -20,20 +20,20 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
   int _currentPage = 0;
 
   Future<void> _gotoNextPage() async {
-  final currentIndex = _pageController.page?.round() ?? 0;
+    final currentIndex = _pageController.page?.round() ?? 0;
 
-  if (currentIndex < 3) {
-    await _pageController.nextPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
-    return;
+    if (currentIndex < 3) {
+      await _pageController.nextPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+      return;
+    }
+
+    await widget.onFinished();
+
+    ref.read(personaThemeProvider.notifier).setPersona(PersonaType.nova);
   }
-
-  await widget.onFinished();
-
-  ref.read(personaThemeProvider.notifier).setPersona("Zen");
-}
 
   List<Widget> _buildOnboardingScreens(PersonaTheme personaTheme) {
     return [
@@ -129,16 +129,16 @@ class _OnboardingFlowState extends ConsumerState<OnboardingFlow> {
 
             switch (index) {
               case 0:
-                themeNotifier.setPersona("Zen");
+                themeNotifier.setPersona(PersonaType.nova);
                 break;
               case 1:
-                themeNotifier.setPersona("Nova");
+                themeNotifier.setPersona(PersonaType.zen);
                 break;
               case 2:
-                themeNotifier.setPersona("Sage");
+                themeNotifier.setPersona(PersonaType.sage);
                 break;
               case 3:
-                themeNotifier.setPersona("Spark");
+                themeNotifier.setPersona(PersonaType.spark);
                 break;
             }
           }),

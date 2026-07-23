@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../../shared/providers/providers.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import '../../../../../shared/widgets/widgets.dart';
 import '../../domain/entities/nova_entities.dart';
 import '../providers/grocery_respository_provider.dart';

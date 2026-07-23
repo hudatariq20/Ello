@@ -7,7 +7,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/foundation.dart'; // Needed for compute()
-import 'package:voice_input/shared/models/personaTheme_model.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
 import 'package:voice_input/shared/services/ElevenLabsTTS/audio_stream_source.dart';
 
 /// Handles text-to-speech functionality using both ElevenLabs API and FlutterTTS

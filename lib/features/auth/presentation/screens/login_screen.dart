@@ -8,9 +8,9 @@ import 'package:voice_input/features/auth/core/utils/validation.dart';
 import 'package:voice_input/features/auth/core/utils/validator.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:voice_input/features/auth/presentation/screens/auth_screen.dart';
-import 'package:voice_input/shared/models/personaTheme_model.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
-import '../../../../shared/providers/personaTheme_provider.dart';
+import '../../../../shared/providers/persona_theme_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

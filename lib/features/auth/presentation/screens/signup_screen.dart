@@ -8,8 +8,8 @@ import 'package:voice_input/features/auth/core/utils/validation.dart';
 import 'package:voice_input/features/auth/core/utils/validator.dart';
 import 'package:voice_input/features/auth/domain/entities/app_user.dart';
 import 'package:voice_input/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:voice_input/shared/models/personaTheme_model.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {

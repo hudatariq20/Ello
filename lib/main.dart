@@ -4,10 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:voice_input/app/startup_gate.dart';
 import 'package:voice_input/features/onboarding/data/onboarding_local_service.dart';
 import 'package:voice_input/features/onboarding/presentation/providers/onboarding_providers.dart';
-import 'package:voice_input/shared/models/personaTheme_model.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/theme/persona_theme_model.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:voice_input/shared/theme/persona_type.dart';
 import 'firebase_options.dart';
 
 bool _isEnvLoaded = false;
@@ -51,7 +52,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     personaTheme = ref.read(personaThemeProvider);
     //ref.read(personaThemeProvider.notifier).setPersona("Nova");
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(personaThemeProvider.notifier).setPersona("Nova");
+      ref.read(personaThemeProvider.notifier).setPersona(PersonaType.nova);
     });
   }
 

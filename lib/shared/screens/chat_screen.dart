@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voice_input/shared/models/message_model.dart';
 import 'package:voice_input/providers/providers.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/services/services.dart';
 import 'package:voice_input/shared/widgets/widgets.dart';
 
@@ -182,7 +182,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final chats = ref.watch(ChatProvider).reversed.toList();
 
     return Scaffold(
-      appBar: ChatAppBar(),
+      //appBar: ChatAppBar(),
       body: GradientBackground(
         child: Column(
           children: [

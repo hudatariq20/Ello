@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:voice_input/features/auth/presentation/screens/login_screen.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
+import 'package:voice_input/shared/theme/persona_presets.dart';
+import 'package:voice_input/shared/theme/persona_type.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
 import '../../../../shared/models/shared_models.dart';
@@ -148,7 +150,7 @@ class ElloHome extends ConsumerWidget {
     WidgetRef ref,
     String persona,
   ) {
-    ref.read(personaThemeProvider.notifier).setPersona(persona);
+    ref.read(personaThemeProvider.notifier).setPersona(PersonaType.nova);
 
     switch (persona) {
       case 'Nova':

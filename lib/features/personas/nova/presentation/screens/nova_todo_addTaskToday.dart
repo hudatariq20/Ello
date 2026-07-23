@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../../../../../shared/providers/providers.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
+
 import '../../../../../shared/widgets/widgets.dart';
 import '../../data/mock/mock_todos.dart';
 import '../../domain/usecases/filter_todos.dart';

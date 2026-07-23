@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voice_input/features/personas/zen/presentation/widgets/zen_widgets.dart';
 import 'package:voice_input/shared/models/message_model.dart';
 import 'package:voice_input/providers/providers.dart';
-import 'package:voice_input/shared/providers/personaTheme_provider.dart';
+import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/services/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
