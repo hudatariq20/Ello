@@ -6,7 +6,6 @@ import 'package:voice_input/shared/theme/persona_presets.dart';
 import 'package:voice_input/shared/theme/persona_type.dart';
 import 'package:voice_input/shared/widgets/gradient_background.dart';
 
-import '../../../../shared/models/shared_models.dart';
 import '../widgets/ello_widgets.dart';
 
 class ElloHome extends ConsumerWidget {

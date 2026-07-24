@@ -47,8 +47,15 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+  child: LayoutBuilder(
+    builder: (context, constraints) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: constraints.maxHeight - 52,
+          ),
+          child: IntrinsicHeight(
             child: Column(
               children: [
                 _buildHeader(context),
@@ -75,7 +82,10 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
                         fontWeight: FontWeight.w600,
                       ),
                 ),
-                const SizedBox(height: 30),
+
+                // Pushes the intro section toward the bottom.
+                const Spacer(),
+
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -94,7 +104,7 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
                     separatorBuilder: (_, __) =>
                         const SizedBox(width: 12),
                     itemBuilder: (context, index) {
-                      final ElloIntroData persona = _personas[index];
+                      final persona = _personas[index];
 
                       return SizedBox(
                         width: 100,
@@ -112,10 +122,17 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
                     },
                   ),
                 ),
+
+                // Keeps cards above the docked microphone.
+                const SizedBox(height: 28),
               ],
             ),
           ),
         ),
+      );
+    },
+  ),
+),
         bottomNavigationBar: ElloBottomNavigation(
           backgroundColor: zenPersonaTheme.appBarColor,
           iconColor: zenPersonaTheme.appBarIconColor,
