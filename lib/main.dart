@@ -1,109 +1,65 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:voice_input/app/startup_gate.dart';
 import 'package:voice_input/features/onboarding/data/onboarding_local_service.dart';
 import 'package:voice_input/features/onboarding/presentation/providers/onboarding_providers.dart';
-import 'package:voice_input/shared/theme/persona_theme_model.dart';
 import 'package:voice_input/shared/providers/persona_theme_provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:voice_input/shared/theme/persona_type.dart';
+import 'package:voice_input/shared/theme/app_theme.dart';
+
 import 'firebase_options.dart';
 
 bool _isEnvLoaded = false;
 
 Future<void> loadEnvOnce() async {
-  if (!_isEnvLoaded) {
-    await dotenv.load(fileName: '.env');
-    _isEnvLoaded = true;
-    debugPrint("✅ .env loaded");
-  }
+  if (_isEnvLoaded) return;
+
+  await dotenv.load(fileName: '.env');
+  _isEnvLoaded = true;
+
+  debugPrint('✅ .env loaded');
 }
-void main() async {
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await loadEnvOnce();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   final onboardingService = OnboardingLocalService();
   await onboardingService.init();
 
-  runApp(ProviderScope(
-    overrides: [
-      onboardingLocalServiceProvider.overrideWithValue(onboardingService),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    ProviderScope(
+      overrides: [
+        onboardingLocalServiceProvider.overrideWithValue(
+          onboardingService,
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-//CONVERT TO STATEFUL WIDGET
-class MyApp extends ConsumerStatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  ConsumerState<MyApp> createState() => _MyAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final personaTheme = ref.watch(personaThemeProvider);
 
-class _MyAppState extends ConsumerState<MyApp> {
-  late PersonaTheme personaTheme;
-  @override
-  void initState() {
-    super.initState();
-    personaTheme = ref.read(personaThemeProvider);
-    //ref.read(personaThemeProvider.notifier).setPersona("Nova");
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(personaThemeProvider.notifier).setPersona(PersonaType.nova);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //final personaTheme = ref.watch(personaThemeProvider);
-    // Listen and update state when theme changes
-    ref.listen(personaThemeProvider, (previous, next) {
-      if (previous != next) {
-        setState(() {
-          personaTheme = next;
-        });
-      }
-    });
-
-    return AnimatedTheme(
-      data: ThemeData(
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: personaTheme.gradientColors.first,
-          brightness: Brightness.light,
-        ),
-      ),
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          brightness: Brightness.light,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: personaTheme
-                .gradientColors.first, // Dynamically use persona seed color
-            brightness: Brightness.light,
-          ),
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.transparent,
-          appBarTheme: AppBarTheme(
-            backgroundColor: personaTheme.appBarColor,
-            elevation: 2,
-            foregroundColor: personaTheme.appBarIconColor,
-            titleTextStyle: GoogleFonts.urbanist(
-              fontSize: 32,
-              fontWeight: FontWeight.w500,
-              color: personaTheme.appBarIconColor,
-            ),
-          ),
-        ),
-
-        home: const StartupGate(),
-      ),
+    return MaterialApp(
+      title: 'Ello',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light(personaTheme),
+      themeAnimationDuration: const Duration(milliseconds: 400),
+      themeAnimationCurve: Curves.easeInOut,
+      home: const StartupGate(),
     );
   }
 }

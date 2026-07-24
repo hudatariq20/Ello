@@ -65,13 +65,15 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w700,
+                        color: zenPersonaTheme.appBarIconColor
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'I can help you with tasks, journaling, planning, and learning.',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: zenPersonaTheme.buttonColors[1]),
+                  
                 ),
                 const SizedBox(height: 26),
                 const ElloAssistantOrb(),
@@ -154,19 +156,21 @@ class ElloHomeScreenNewUser extends ConsumerWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Spacer(),
+        //const Spacer(),
         Text(
           'Ello',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          style: Theme.of(context).textTheme.displayLarge?.copyWith(
                 fontWeight: FontWeight.w700,
+                color: zenPersonaTheme.buttonColors[1]
               ),
         ),
-        const Spacer(),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.notifications_none),
-        ),
+        // const Spacer(),
+        // IconButton(
+        //   onPressed: () {},
+        //   icon: const Icon(Icons.notifications_none),
+        // ),
       ],
     );
   }
