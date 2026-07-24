@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voice_input/features/ello/presentation/models/ello_intro_data.dart';
+import 'package:voice_input/shared/theme/persona_presets.dart';
 
 class ElloIntroCard extends StatelessWidget {
   final ElloIntroData data;
@@ -13,80 +14,41 @@ class ElloIntroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final personaTheme = personaThemes[data.type]!;
+
     return Material(
-      color: Colors.white.withOpacity(0.72),
+      color: Colors.white.withOpacity(0.55),
       borderRadius: BorderRadius.circular(18),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 14,
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _PersonaIcon(
-                icon: data.icon,
-                accentColor: data.accentColor,
+              Icon(
+                data.icon,
+                size: 28,
+                color: personaTheme.appBarIconColor,
               ),
-              const SizedBox(height: 14),
-              Text(
-                data.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-              ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 12),
               Text(
                 data.category,
+                textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const Spacer(),
-              Text(
-                data.actionLabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: data.accentColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _PersonaIcon extends StatelessWidget {
-  final IconData icon;
-  final Color accentColor;
-
-  const _PersonaIcon({
-    required this.icon,
-    required this.accentColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: accentColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        icon,
-        color: Colors.white,
-        size: 22,
       ),
     );
   }

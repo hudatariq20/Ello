@@ -1,53 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:voice_input/features/ello/presentation/models/ello_intro_data.dart';
 import 'package:voice_input/shared/providers/persona_theme_provider.dart';
 import 'package:voice_input/shared/theme/persona_presets.dart';
 import 'package:voice_input/shared/theme/persona_type.dart';
-
 import 'package:voice_input/shared/widgets/gradient_background.dart';
-
-
 
 import '../widgets/ello_widgets.dart';
 
 class ElloHomeScreenNewUser extends ConsumerWidget {
   const ElloHomeScreenNewUser({super.key});
 
-static const _personas = <ElloIntroData>[
+  static const List<ElloIntroData> _personas = [
   ElloIntroData(
     type: PersonaType.nova,
-    name: 'Nova',
     category: 'Tasks & Reminders',
     actionLabel: 'Start with Nova',
     icon: Icons.check_circle_outline,
-    accentColor: Color(0xFF42A5F5),
   ),
   ElloIntroData(
     type: PersonaType.zen,
-    name: 'Zen',
     category: 'Journaling',
     actionLabel: 'Start a journal',
     icon: Icons.self_improvement,
-    accentColor: Color(0xFF8F54FF),
   ),
   ElloIntroData(
     type: PersonaType.spark,
-    name: 'Spark',
     category: 'Planning',
     actionLabel: 'Plan your week',
     icon: Icons.flash_on,
-    accentColor: Color(0xFFFF8A65),
   ),
   ElloIntroData(
     type: PersonaType.sage,
-    name: 'Sage',
     category: 'Learning',
     actionLabel: 'Ask Sage anything',
     icon: Icons.school_outlined,
-    accentColor: Color(0xFF8D6E63),
   ),
 ];
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GradientBackground(
@@ -94,31 +86,31 @@ static const _personas = <ElloIntroData>[
                   ),
                 ),
                 const SizedBox(height: 14),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _personas.length,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 1.05,
-                  ),
-                  itemBuilder: (context, index) {
-                    final persona = _personas[index];
+                SizedBox(
+                  height: 132,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _personas.length,
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      final ElloIntroData persona = _personas[index];
 
-                    return ElloIntroCard(
-                      data: persona,
-                      onTap: () {
-                        _openPersona(
-                          context,
-                          ref,
-                          persona.type,
-                        );
-                      },
-                    );
-                  },
+                      return SizedBox(
+                        width: 100,
+                        child: ElloIntroCard(
+                          data: persona,
+                          onTap: () {
+                            _openPersona(
+                              context,
+                              ref,
+                              persona.type,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -130,7 +122,7 @@ static const _personas = <ElloIntroData>[
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Speech flow will be connected later.
+            // Connect the speech flow later.
           },
           shape: const CircleBorder(),
           backgroundColor: zenPersonaTheme.buttonColors.first,
@@ -162,29 +154,34 @@ static const _personas = <ElloIntroData>[
     );
   }
 
- void _openPersona(
-  BuildContext context,
-  WidgetRef ref,
-  PersonaType persona,
-) {
-  ref.read(personaThemeProvider.notifier).setPersona(persona);
+  void _openPersona(
+    BuildContext context,
+    WidgetRef ref,
+    PersonaType persona,
+  ) {
+    ref.read(personaThemeProvider.notifier).setPersona(persona);
 
-  switch (persona) {
-    case PersonaType.nova:
-      // Navigator.push(...NovaHubScreen());
-      break;
+    switch (persona) {
+      case PersonaType.nova:
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => const NovaHubScreen(),
+        //   ),
+        // );
+        break;
 
-    case PersonaType.zen:
-      // Navigator.push(...ZenHubScreen());
-      break;
+      case PersonaType.zen:
+        // Navigate to Zen.
+        break;
 
-    case PersonaType.spark:
-      // Navigator.push(...SparkHubScreen());
-      break;
+      case PersonaType.spark:
+        // Navigate to Spark.
+        break;
 
-    case PersonaType.sage:
-      // Navigator.push(...SageHubScreen());
-      break;
+      case PersonaType.sage:
+        // Navigate to Sage.
+        break;
+    }
   }
-}
 }
